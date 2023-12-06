@@ -6,7 +6,7 @@ import processing.core.PApplet;
 public class Aoc extends PApplet {
 
     final boolean USE_EXAMPLE = false;
-    final int DAY = 4;
+    final int DAY = 5;
     final String INPUT_PATH = "2023/inputs/";
 
     public void settings() {
@@ -15,8 +15,17 @@ public class Aoc extends PApplet {
         // Create day and run it
         try {
             AbstractDay day = createDay();
+            long startTime = System.nanoTime();
             day.puzzle1();
+            long endTime = System.nanoTime();
+            double executionTime = (endTime - startTime) / 1000000.0;
+            System.out.println("Execution time in milliseconds: " + executionTime);
+
+            startTime = System.nanoTime();
             day.puzzle2();
+            endTime = System.nanoTime();
+            executionTime = (endTime - startTime) / 1000000.0;
+            System.out.println("Execution time in milliseconds: " + executionTime);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }

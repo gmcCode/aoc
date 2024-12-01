@@ -6,7 +6,7 @@ import processing.core.PApplet;
 public class Aoc extends PApplet {
 
     final boolean USE_EXAMPLE = false;
-    final int DAY = 9;
+    final int DAY = 16;
     final String INPUT_PATH = "2023/inputs/";
 
     public void settings() {

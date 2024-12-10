@@ -121,8 +121,45 @@ def part2dict(input):
         position += file.length
     return result
 
+
+def part2lists(input):
+    result = 0
+    files = []
+    gaps = []
+
+    pos = 0
+    id = 0
+    for idx, element in enumerate(input[0]):
+        if idx % 2 == 0:
+            # file
+            files.append([pos, int(element), id])
+            id += 1
+        else:
+            # free
+            gaps.append([pos, int(element)])
+        pos += int(element)
+
+    for file in reversed(files):
+        for gap in gaps:
+            if gap[0] > file[0]:
+                break
+            if gap[1] >= file[1]:
+                file[0] = gap[0]
+                if gap[1] == file[1]:
+                    gaps.remove(gap)
+                else:
+                    gap[0] += file[1]
+                    gap[1] -= file[1]
+                break
+
+    for file in files:
+        result += (file[0] * file[1] +
+                   ((file[1]-1)*file[1])//2) * file[2]
+    return result
+
 if __name__ == "__main__":
     input = get_input_as_lines(test=False)
 
     timed_execution(part1, input, number=10)
-    timed_execution(part2dict, input, number=10)
+    timed_execution(part2dict, input, number=1)
+    timed_execution(part2lists, input, number=10)

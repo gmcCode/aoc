@@ -48,7 +48,7 @@ def part1(input):
     drive = defrag(disk(input))
     for x in range(len(drive)):
         if drive[x] != '.':
-           summe += x*drive[x]
+            summe += x*drive[x]
     return summe
 
 
@@ -81,23 +81,48 @@ class File:
 
 
 def part2dict(input):
-    startdrive = {}
+    result = 0
+    startdrive = []
 
     id = 0
     for idx, element in enumerate(input[0]):
         if idx % 2 == 0:
             # file
-            startdrive[idx] = File(id=id, length=element)
+            startdrive.append(File(id=id, length=int(element)))
             id += 1
         else:
             # free
-            startdrive[idx] = File(id=-1, length=element)
+            startdrive.append(File(id=-1, length=int(element)))
 
-    return 0
+    revFileIdx = 0
+    while revFileIdx < len(startdrive):
+        fileIdx = len(startdrive) - 1 - revFileIdx
+        if startdrive[fileIdx].id != -1:
+            freeIdx = 0
+            while freeIdx < fileIdx:
+                if startdrive[freeIdx].id == -1 and startdrive[freeIdx].length >= startdrive[fileIdx].length:
+                    offset = 0
+                    if startdrive[fileIdx].length < startdrive[freeIdx].length:
+                        startdrive.insert(
+                            freeIdx + 1, File(id=-1, length=startdrive[freeIdx].length-startdrive[fileIdx].length))
+                        offset = 1
+                    startdrive[freeIdx] = startdrive[fileIdx + offset]
+                    startdrive[fileIdx + offset] = File(
+                        id=-1, length=startdrive[fileIdx + offset].length)
+                    break
+                freeIdx += 1
+        revFileIdx += 1
 
+    position = 0
+    for file in startdrive:
+        if file.id != -1:
+            result += (position * file.length +
+                       ((file.length-1)*file.length)//2) * file.id
+        position += file.length
+    return result
 
 if __name__ == "__main__":
-    input = get_input_as_lines(test=True)
+    input = get_input_as_lines(test=False)
 
-    # timed_execution(part1, input, number=10)
-    timed_execution(part2dict, input, number=1)
+    timed_execution(part1, input, number=10)
+    timed_execution(part2dict, input, number=10)

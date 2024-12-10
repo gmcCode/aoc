@@ -1,5 +1,4 @@
 from utils import *
-from time import time
 from collections import defaultdict
 
 def parse_input(input):
